@@ -1,3 +1,4 @@
+//Requete pour connexion à la DB
 const mysql = require('mysql');
 
 const db = mysql.createConnection({
