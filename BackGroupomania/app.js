@@ -2,7 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const dotenv = require('dotenv').config();
+
 const authRoutes = require('./routes/auth');
+const postRoutes = require('./routes/post');
 
 const app = express();
 
@@ -16,5 +18,6 @@ app.use((req, res, next) => {
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
+app.use('/api/post', postRoutes);
 
 module.exports = app;

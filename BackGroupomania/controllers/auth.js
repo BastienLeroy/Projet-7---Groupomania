@@ -1,10 +1,7 @@
 const bcrypt = require('bcrypt');
-const AuthModel = require('../models/Auth');
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql');
 const dbConnect = require('../config/dbConnect');
-
-const Auth = new AuthModel();
 
 exports.signup = async (req, res, next) => {
     try {
@@ -25,12 +22,12 @@ exports.signup = async (req, res, next) => {
     }
 };
 
-exports.signin = async (req, res, next) => {
+exports.signin = (req, res, next) => {
     const { email, password } = req.body
     let sql = 'SELECT * FROM users WHERE email = ?';
     sql = mysql.format(sql, [email]);
 
-    await dbConnect.query(sql, async (err, result) => {
+    dbConnect.query(sql, async (err, result) => {
         if (err || !result[0]) {
             res.status(400).json({ error: 'Utilisateur introuvable !' });
         } else {
