@@ -1,11 +1,15 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const path = require('path');
 const dotenv = require('dotenv').config();
+const cookieParser = require('cookie-parser');
+const helmet = require('helmet');
+const xss = require('xss-clean');
+
 
 const authRoutes = require('./routes/auth');
 const postRoutes = require('./routes/post');
 const commentRoutes = require('./routes/comment');
+
 
 const app = express();
 
@@ -16,10 +20,15 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(express.json());
 
+app.use(helmet());
+app.use(xss());
+
+app.use(express.json());
+app.use(cookieParser());
 app.use('/api/auth', authRoutes);
 app.use('/api/post', postRoutes);
 app.use('/api/comment', commentRoutes);
+
 
 module.exports = app;

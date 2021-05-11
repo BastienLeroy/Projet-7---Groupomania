@@ -36,19 +36,30 @@ exports.signin = (req, res, next) => {
                 const response = await bcrypt.compare(password, result[0].password);
                 if (!response) {
                     res.status(400).json({ error: 'Email ou mot de passe incorrect !' })
-                }
-                res.status(201).json({
-                    userId: result[0].id,
-                    token: jwt.sign( // Si utilisateur trouvé suite à la comparaison des password avec bcrypt, connexion possible
+                } else {
+                    const { id, name, firstname, email, isMod } = result[0];
+
+                    const token = jwt.sign(
                         {
-                            userId: result[0].id,
-                            isModerator: result[0].isMod
+                            id,
+                            isMod
                         },
                         process.env.RANDOM_TOKEN,
-                        { expiresIn: '24h' } 
-                    ),
-                    isModerator: result[0].isMod
-                });
+                        { expiresIn: '24h' }
+                    );
+
+                    res.cookie('access_token', token, {
+                        maxAge: 86400,
+                        httpOnly: true,
+                    });
+                    res.status(200).json({
+                        id,
+                        name,
+                        firstname,
+                        email,
+                        isMod
+                    });
+                }
             } catch(err) {
                 res.status(400).json({ error: err })
             }

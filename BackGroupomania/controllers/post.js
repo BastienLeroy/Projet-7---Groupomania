@@ -47,6 +47,7 @@ exports.modifyPost = (req, res, next) => {
         }
     })
 };
+
 exports.deletePost = (req, res, next) => {
     const { id } = req.body;
 
