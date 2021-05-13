@@ -9,6 +9,7 @@ const xss = require('xss-clean');
 const authRoutes = require('./routes/auth');
 const postRoutes = require('./routes/post');
 const commentRoutes = require('./routes/comment');
+const userRoutes = require('./routes/user');
 
 
 const app = express();
@@ -26,9 +27,11 @@ app.use(xss());
 
 app.use(express.json());
 app.use(cookieParser());
+app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/auth', authRoutes);
 app.use('/api/post', postRoutes);
 app.use('/api/comment', commentRoutes);
+app.use('/api/user', userRoutes);
 
 
-module.exports = app;  
+module.exports = app;

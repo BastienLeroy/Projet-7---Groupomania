@@ -9,4 +9,4 @@ router.post('/createPost', multer, postCtrl.createPost);
 router.put('/modifyPost', multer, postCtrl.modifyPost);
 router.delete('/deletePost', postCtrl.deletePost);
 
-module.exports = router;
+module.exports = router; 
