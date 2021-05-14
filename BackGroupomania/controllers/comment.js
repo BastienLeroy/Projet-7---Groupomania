@@ -2,14 +2,16 @@ const mysql = require('mysql');
 const dbConnect = require('../config/dbConnect');
 
 exports.getAllComments = (req, res, next) => {
-    const sql = "SELECT comments.id, post_id, user_id, content, DATE_FORMAT(DATE(comments.updated_at), '%d/%m/%Y') AS date, TIME(comments.updated_at) AS time, name, firstname FROM comments INNER JOIN users ON comments.user_id = users.id WHERE comments.post_id = 2"
+    const { id } = req.query;
+    
+    let sql = "SELECT comments.id, post_id, user_id, content, DATE_FORMAT(DATE(comments.updated_at), '%d/%m/%Y') AS date, TIME(comments.updated_at) AS time, name, firstname FROM comments INNER JOIN users ON comments.user_id = users.id WHERE comments.post_id = ?"
+    sql = mysql.format(sql, [id]);
 
     dbConnect.query(sql, (err, result) => {
         if (err) {
             res.status(400).json({ error: err });
         } else {
-            res.status(201).json(result);
-            console.log(result)
+            res.status(200).json(result);
         }
     })
 };
@@ -25,7 +27,6 @@ exports.createComment = (req, res, next) => {
         } else {
             res.status(201).json({ message: 'Commentaire créé avec succès'});
         }
-       
     })
 };
 
@@ -41,7 +42,6 @@ exports.modifyComment = (req, res, next) => {
             res.status(400).json({ error: err });
         } else {
             res.status(201).json({ message: 'Commentaire modifié avec succès'});
-            console.log(result)
         }
     })
 };
@@ -59,5 +59,4 @@ exports.deleteComment = (req, res, next) => {
             res.status(201).json({ message: 'Commentaire supprimé avec succès'});
         }
     })
-
 };

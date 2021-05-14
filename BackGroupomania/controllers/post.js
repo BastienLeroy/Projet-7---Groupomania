@@ -6,7 +6,7 @@ const fs = require('fs');
 // Fonction pour récupération de tout les posts
 exports.getAllPosts = (req, res, next) => {
     //Requete MySql pour créer une jointure entre les champs de la table posts et les champs de la table users
-    const sql = "SELECT posts.id, user_id, posts.image_url, content, DATE_FORMAT(DATE(posts.updated_at), '%d/%m/%Y') AS date, TIME(posts.updated_at) AS time, name, firstname FROM posts INNER JOIN users ON posts.user_id = users.id ORDER BY posts.updated_at DESC"
+    const sql = "SELECT posts.id, user_id, posts.image_url, content, DATE_FORMAT(DATE(posts.updated_at), '%d/%m/%Y') AS date, TIME(posts.updated_at) AS time, name, firstname, users.image_url AS userImage FROM posts INNER JOIN users ON posts.user_id = users.id ORDER BY posts.updated_at DESC"
     dbConnect.query(sql, (err, result) => {
         if (err) {
             res.status(400).json({ error: err });
