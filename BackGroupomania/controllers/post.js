@@ -64,6 +64,7 @@ exports.deletePost = (req, res, next) => {
             fs.unlink(`images/${postImageName}`, () => {
                 let sql = "DELETE FROM `posts` WHERE id = ?"
                 sql = mysql.format(sql, [ id ]);
+
                 dbConnect.query(sql, (err, result) => {
                     if (err) {
                         res.status(400).json({ error: err });

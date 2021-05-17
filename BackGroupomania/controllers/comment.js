@@ -32,6 +32,9 @@ exports.createComment = (req, res, next) => {
 
 exports.modifyComment = (req, res, next) => {
     const { id, content } = req.body;
+
+    console.log(id, content);
+    
     const date = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
     let sql = "UPDATE comments SET content = ?, updated_at = ? WHERE id = ?";
@@ -41,7 +44,7 @@ exports.modifyComment = (req, res, next) => {
         if (err) {
             res.status(400).json({ error: err });
         } else {
-            res.status(201).json({ message: 'Commentaire modifié avec succès'});
+            res.status(200).json({ message: 'Commentaire modifié avec succès'});
         }
     })
 };
@@ -49,14 +52,14 @@ exports.modifyComment = (req, res, next) => {
 exports.deleteComment = (req, res, next) => {
     const { id } = req.body;
     
-    let sql = "DELETE FROM `comments` WHERE id = 3";
+    let sql = "DELETE FROM `comments` WHERE id = ?";
     sql = mysql.format(sql, [id])
 
     dbConnect.query(sql, (err, result) => {
         if (err) {
             res.status(400).json({ error: err });
         } else {
-            res.status(201).json({ message: 'Commentaire supprimé avec succès'});
+            res.status(200).json({ message: 'Commentaire supprimé avec succès'});
         }
     })
 };
