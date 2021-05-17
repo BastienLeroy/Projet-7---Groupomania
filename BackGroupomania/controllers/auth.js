@@ -23,6 +23,7 @@ exports.signup = async (req, res, next) => {
         res.status(400).json({ error: err })
     }
 };
+
 //Fonction pour la connexion d'un utilisateur existant 
 exports.signin = (req, res, next) => {
     const { email, password } = req.body// Déclaration des constantes = contenu du body (email et password)
@@ -50,7 +51,7 @@ exports.signin = (req, res, next) => {
                     );
 
                     res.cookie('access_token', token, {
-                        maxAge: 86400,
+                        maxAge: 86400000,
                         httpOnly: true,
                     });
                     res.status(200).json({
@@ -61,10 +62,45 @@ exports.signin = (req, res, next) => {
                         email,
                         isMod
                     });
+                    res.send();
                 }
             } catch(err) {
                 res.status(400).json({ error: err })
             }
         }
     })
+};
+
+exports.checklogged = (req, res, next) => {
+    const cookie = req.cookies['access_token'];
+    
+    if (typeof cookie === 'undefined') {
+        res.status(200).json({ error: "pas de cookie" });
+    } else {
+        const decodedToken = jwt.verify(cookie, process.env.RANDOM_TOKEN);
+
+        let sql = 'SELECT * FROM users WHERE id = ?';
+        sql = mysql.format(sql, [decodedToken.id]);
+
+        dbConnect.query(sql, (err, result) => {
+            if (err) {
+                res.status(200).json({ error: 'Utilisateur introuvable' });
+            } else {
+                const { id, image_url, name, firstname, email, isMod } = result[0];
+    
+                res.status(200).json({
+                    id,
+                    image_url,
+                    name,
+                    firstname,
+                    email,
+                    isMod
+                });
+            }
+        })
+    }
+};
+
+exports.disconnect = (req, res, next) => {
+    res.clearCookie('access_token').send();
 };

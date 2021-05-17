@@ -3,6 +3,7 @@ const router = express.Router();
 
 const commentCtrl = require('../controllers/comment');
 
+
 router.get('/getAllComments', commentCtrl.getAllComments);
 router.post('/createComment', commentCtrl.createComment);
 router.put('/modifyComment', commentCtrl.modifyComment);
