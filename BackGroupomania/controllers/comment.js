@@ -32,8 +32,6 @@ exports.createComment = (req, res, next) => {
 
 exports.modifyComment = (req, res, next) => {
     const { id, content } = req.body;
-
-    console.log(id, content);
     
     const date = new Date().toISOString().slice(0, 19).replace('T', ' ');
 

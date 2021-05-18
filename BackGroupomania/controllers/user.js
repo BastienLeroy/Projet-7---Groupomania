@@ -8,7 +8,7 @@ exports.modifyUser = (req, res, next) => {
     const bodyParsed = JSON.parse(req.body.dataInput);
 
     const { id, name, firstname, email, password  } = bodyParsed;
-    const imageUrl = typeof req.file !== 'undefined' ? `${req.protocol}://${req.get('host')}/images/${req.baseUrl === '/api/user' ? 'users' : 'posts'}/${req.file.filename}` : req.body.imageUrl;
+    const imageUrl = typeof req.file !== 'undefined' ? `${req.protocol}://${req.get('host')}/images/${req.baseUrl === '/api/user' ? 'users' : 'posts'}/${req.file.filename}` : bodyParsed.imageUrl;
     const date  = new Date().toISOString().slice(0, 19).replace('T', ' ');
     
     let sql;
@@ -24,7 +24,13 @@ exports.modifyUser = (req, res, next) => {
         if (err) {
             res.status(400).json({ error: err });
         } else {
-            res.status(201).json({ message: 'Utilisateur modifié avec succès'});
+            const dataToReturn = {
+                name,
+                firstname,
+                email,
+                imageUrl
+            };
+            res.status(200).json(dataToReturn);
         }
     })
 };
