@@ -26,7 +26,7 @@ exports.signup = async (req, res, next) => {
 
 //Fonction pour la connexion d'un utilisateur existant 
 exports.signin = (req, res, next) => {
-    const { email, password } = req.body// Déclaration des constantes = contenu du body (email et password)
+    const { email, password } = req.body// Déclaration des constantes = contenu du body (email et password) 
     let sql = 'SELECT * FROM users WHERE email = ?';
     sql = mysql.format(sql, [email]);
 
